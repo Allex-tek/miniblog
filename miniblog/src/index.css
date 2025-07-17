@@ -41,7 +41,7 @@ form {
 label {
     display: flex;
     flex-direction: column;
-    margin-bottom: 1px;
+    margin-bottom: 1em;
 }
 
 label span {
@@ -107,4 +107,8 @@ button[disabled] {
     border: 1px solid #f5c6cb;
     padding: 5px;
     border-radius: 5px;
+
+    /* my code */
+    max-width: 40%;
+    margin: 0 auto;
 }
