@@ -2,7 +2,9 @@ import styles from './About.module.css'
 
 const About = () => {
   return (
-    <div>About</div>
+    <div>
+      <h2>About</h2>
+    </div>
   )
 }
 
