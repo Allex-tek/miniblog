@@ -1,3 +1,4 @@
+import { useAuthentication } from "../../hooks/useAuthentication";
 import styles from "./Register.module.css";
 
 import { useState, useEffect } from "react";
@@ -9,7 +10,9 @@ const Register = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
 
-  const handleSubmit = (event) => {
+  const { createUser, error: authError, loading } = useAuthentication();
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     const user = {
@@ -22,7 +25,10 @@ const Register = () => {
       setError("As senhas não coincidem.");
       return;
     }
-    console.log(user);
+
+    const response = await createUser(user);
+
+    console.log(response);
 
     setConfirmPassword("");
     setDisplayName("");
@@ -30,6 +36,13 @@ const Register = () => {
     setError("");
     setPassword("");
   };
+
+  useEffect(() => {
+    if (authError) {
+      setError(authError);
+    }
+  }, [authError]);
+
   return (
     <div className={styles.register}>
       <h1>Cadastre-se para postar</h1>
@@ -43,6 +56,7 @@ const Register = () => {
             name="displayName"
             required
             placeholder="Nome do usuário"
+            autoComplete="username"
             value={displayName}
             onChange={(event) => setDisplayName(event.target.value)}
           />
@@ -61,6 +75,7 @@ const Register = () => {
             name="password"
             required
             placeholder="senha do usuário"
+            autoComplete="new-password"
             value={password}
             onChange={(event) => setPassword(event.target.value)}
           />
@@ -70,11 +85,17 @@ const Register = () => {
             name="confirmPassword"
             required
             placeholder="Confirmar senha"
+            autoComplete="new-password"
             value={confirmPassword}
             onChange={(event) => setConfirmPassword(event.target.value)}
           />
         </label>
-        <button className="btn">Cadastrar</button>
+        {!loading && <button className="btn">Cadastrar</button>}
+        {loading && (
+          <button className="btn" disabled>
+            Aguarde...
+          </button>
+        )}
       </form>
     </div>
   );
